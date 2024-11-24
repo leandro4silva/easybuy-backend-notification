@@ -6,6 +6,7 @@ using CompraFacil.Notification.Infra.SendGrid.Abstraction;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SendGrid.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CompraFacil.Notification.Infra;
@@ -24,20 +25,7 @@ public static class DependencyInjection
     {
         services.AddSingleton<MailConfiguration>(m => appConfiguration.Mail!);
 
-        services.AddSingleton<ISmtpClient>(sp =>
-        {
-            var smtpClient = new SmtpClient();
-
-            smtpClient.Connect(
-                appConfiguration.Mail!.Host, 
-                appConfiguration.Mail!.Port, 
-                MailKit.Security.SecureSocketOptions.StartTls
-            );
-
-            smtpClient.Authenticate(appConfiguration.Mail.FromEmail, appConfiguration.Mail.Password);
-
-            return smtpClient;
-        });
+        services.AddSendGrid(sp => sp.ApiKey = appConfiguration.Mail?.SendGridApiKey);
 
         services.AddTransient<ISendMailService, SendMailService>();
 

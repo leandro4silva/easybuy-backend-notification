@@ -1,33 +1,40 @@
-﻿using MailKit.Net.Smtp;
-using CompraFacil.Notification.Infra.Configurations;
+﻿using CompraFacil.Notification.Infra.Configurations;
 using CompraFacil.Notification.Infra.SendGrid.Abstraction;
-using MimeKit;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace CompraFacil.Notification.Infra.SendGrid;
 
 public class SendMailService : ISendMailService
 {
     private readonly MailConfiguration _config;
-    private readonly ISmtpClient _sendSmtpClient;
+    private readonly ISendGridClient _sendGridClient;
 
-    public SendMailService(ISmtpClient sendSmtpClient, MailConfiguration config)
+    public SendMailService(ISendGridClient sendGridClient, MailConfiguration config)
     {
         _config = config;
-        _sendSmtpClient = sendSmtpClient;
+        _sendGridClient = sendGridClient;
     }
 
     public async Task SendAsync(string subject, string content, string toEmail, string toName)
     {
-        var email = new MimeMessage();
-        email.From.Add(new MailboxAddress(_config.FromName, _config.FromEmail));
-        email.To.Add(new MailboxAddress(toName, toEmail));
-        email.Subject = subject;
+        var from = new EmailAddress(_config.FromEmail, _config.FromName);
+        var to = new EmailAddress(toEmail, toName);
 
-        email.Body = new TextPart("plain")
+        var message = new SendGridMessage
         {
-            Text = content
+            From = from,
+            Subject = subject
         };
 
-        await _sendSmtpClient.SendAsync(email);
+        message.AddContent(MimeType.Html, content);
+        message.AddTo(to);
+
+        message.SetClickTracking(false, false);
+        message.SetOpenTracking(false);
+        message.SetGoogleAnalytics(false);
+        message.SetSubscriptionTracking(false);
+
+        await _sendGridClient.SendEmailAsync(message);
     }
 }
