@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CompraFacil.Notification.Application\CompraFacil.Notification.Application.csproj" />
     <ProjectReference Include="..\CompraFacil.Notification.Infra.Data.MongoDb\CompraFacil.Notification.Infra.Data.MongoDb.csproj" />
     <ProjectReference Include="..\CompraFacil.Notification.Infra.MessageBus\CompraFacil.Notification.Infra.MessageBus.csproj" />
     <ProjectReference Include="..\CompraFacil.Notification.Infra\CompraFacil.Notification.Infra.csproj" />

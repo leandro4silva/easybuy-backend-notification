@@ -12,6 +12,11 @@ public class MailRepository : IMailRepository
         _mongoRepository = mongoRepository;
     }
 
+    public async Task AddAsync(EmailTemplate emailTemplate, CancellationToken cancellationToken)
+    {
+        await _mongoRepository.AddAsync(emailTemplate);
+    }
+
     public async Task<EmailTemplate> GetTemplate(string @event)
     {
         return await _mongoRepository.GetAsync(@event);

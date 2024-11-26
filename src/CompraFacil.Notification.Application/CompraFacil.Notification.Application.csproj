@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CompraFacil.Notification.Domain\CompraFacil.Notification.Domain.csproj" />
+    <ProjectReference Include="..\CompraFacil.Notification.Infra.Data.MongoDb\CompraFacil.Notification.Infra.Data.MongoDb.csproj" />
+    <ProjectReference Include="..\CompraFacil.Notification.Infra\CompraFacil.Notification.Infra.csproj" />
+  </ItemGroup>
+
 </Project>
